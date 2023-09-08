@@ -59,22 +59,27 @@ function Section({children, title}: SectionProps): JSX.Element {
   );
 }
 
-async function openLink() {
+const openLink = (link: string) => {
+  Linking.openURL(link);
+};
+
+async function openInAppBrowser() {
   try {
     const url = 'https://github.com/proyecto26';
     if (await InAppBrowser.isAvailable()) {
       const result = await InAppBrowser.open(url, {
-        // iOS Properties
-        dismissButtonStyle: 'cancel',
-        preferredBarTintColor: '#453AA4',
-        preferredControlTintColor: 'white',
-        readerMode: false,
-        animated: true,
-        modalPresentationStyle: 'fullScreen',
-        modalTransitionStyle: 'coverVertical',
-        modalEnabled: true,
-        enableBarCollapsing: false,
-        // Android Properties
+        //* iOS Properties
+        //dismissButtonStyle: 'cancel',
+        //preferredBarTintColor: '#453AA4',
+        //preferredControlTintColor: 'white',
+        //readerMode: false,
+        //animated: true,
+        //modalPresentationStyle: 'fullScreen',
+        //modalTransitionStyle: 'coverVertical',
+        //modalEnabled: true,
+        //enableBarCollapsing: false,
+
+        //* Android Properties
         showTitle: true,
         toolbarColor: '#6200EE',
         secondaryToolbarColor: 'black',
@@ -96,12 +101,14 @@ async function openLink() {
         },
       });
       await this?.sleep(800);
+      console.log(JSON.stringify(result));
       Alert.alert(JSON.stringify(result));
     } else {
       Linking.openURL(url);
     }
   } catch (error) {
-    Alert.alert(error.message);
+    console.log(error);
+    //Alert.alert(error.message);
   }
 }
 
@@ -139,8 +146,9 @@ function App(): JSX.Element {
           <Section title="Learn More">
             Read the docs to discover what to do next:
           </Section>
-          <Pressable onPress={openLink}>
-            <Text style={{color: 'white'}}>asdfadsfasdfasdfasfsdf</Text>
+          <Pressable //onPress={() => openLink('https://github.com/proyecto26')}
+            onPress={openInAppBrowser}>
+            <Text style={{color: 'red'}}>asdfadsfasdfasdfasfsdf</Text>
           </Pressable>
           <LearnMoreLinks />
         </View>
