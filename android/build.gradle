@@ -3,10 +3,11 @@
 buildscript {
     //* InAppBrowserTest를 위해 수정
   ext {
+    ndkVersion = "21.4.7075529"
     buildToolsVersion = "28.0.3"
-    minSdkVersion = 16
-    compileSdkVersion = 28
-    targetSdkVersion = 28
+    minSdkVersion = 21
+    compileSdkVersion = 34
+    targetSdkVersion = 34
     // Only using Android Support libraries
     supportLibVersion = "28.0.0"
   }
