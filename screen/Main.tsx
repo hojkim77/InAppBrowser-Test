@@ -6,7 +6,6 @@
  */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
 import {
   Alert,
   Linking,
@@ -14,50 +13,27 @@ import {
   SafeAreaView,
   ScrollView,
   StatusBar,
-  StyleSheet,
   Text,
   useColorScheme,
   View,
+  Button,
+  TextInput,
 } from 'react-native';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
+{
+  //? For navigation
+  /*
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '../App';
+ */
 }
+
+import {Colors, Header} from 'react-native/Libraries/NewAppScreen';
+
+//? For react-hook-form
+import {useForm, Controller} from 'react-hook-form';
 
 async function openInAppBrowser() {
   try {
@@ -108,12 +84,25 @@ async function openInAppBrowser() {
   }
 }
 
-function MainScreen(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+function MainScreen() {
+  const isDarkMode = useColorScheme() === 'light';
+
+  //const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm({
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+    },
+  });
+  const onSubmit = (data: any) => console.log(data);
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -129,47 +118,76 @@ function MainScreen(): JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <Pressable //onPress={() => openLink('https://github.com/proyecto26')}
-            onPress={openInAppBrowser}>
-            <Text style={{color: 'red'}}>asdfadsfasdfasdfasfsdf</Text>
+          {/**
+           *  //? test 페이지 이동
+           */}
+          <Pressable onPress={openInAppBrowser}>
+            <Text
+              style={{
+                backgroundColor: 'gray',
+                color: 'white',
+                fontSize: 24,
+                alignSelf: 'center',
+                marginTop: 24,
+              }}>
+              InAppBrowserTest
+            </Text>
           </Pressable>
-          <LearnMoreLinks />
+          <Pressable onPress={openInAppBrowser}>
+            <Text
+              style={{
+                backgroundColor: 'gray',
+                color: 'white',
+                fontSize: 24,
+                alignSelf: 'center',
+                marginTop: 24,
+              }}>
+              ReactHookFormTest
+            </Text>
+          </Pressable>
+          {/**
+           *  //? react-hook-form Test_1
+           */}
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({field: {onChange, onBlur, value}}) => (
+              <TextInput
+                placeholder="First name"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="firstName"
+          />
+          {errors.firstName && <Text>This is required.</Text>}
+          {/**
+           *  //? react-hook-form Test_2
+           */}
+          <Controller
+            control={control}
+            rules={{
+              maxLength: 100,
+            }}
+            render={({field: {onChange, onBlur, value}}) => (
+              <TextInput
+                placeholder="Last name"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="lastName"
+          />
+          {errors.lastName && <Text>This is required.</Text>}
+          <Button title="Submit" onPress={handleSubmit(onSubmit)} />
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default MainScreen;
