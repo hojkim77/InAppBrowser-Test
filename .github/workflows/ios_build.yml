@@ -39,15 +39,18 @@ jobs:
           bundle exec pod install
 
       - name: Build iOS JS Bundle
+        if: failure()
         run: |
           yarn run package-ios
 
       - name: Install bundler
+        if: failure()
         run: |
           cd ios
           gem install bundler
 
       - name: Install gem plugins
+        if: failure()
         run: |
           cd ios
           bundle install
