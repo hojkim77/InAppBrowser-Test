@@ -7,7 +7,7 @@ on:
 jobs:
   ios-build:
     name: iOS Build Test
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Show self-hosted machine infomation
