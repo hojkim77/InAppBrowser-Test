@@ -7,7 +7,7 @@ on:
 jobs:
   ios-build:
     name: iOS Build Test
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
 
     steps:
       - name: Show self-hosted machine infomation
@@ -25,16 +25,5 @@ jobs:
         run: yarn install
 
       - name: Install pod dependency
-        if: success()
         run: |
-          cd ios && pod install && cd ..
-
-      - name: Install bundler
-        if: success()
-        run: |
-          cd ios && gem install bundler && cd..
-
-      - name: Install gem plugins
-        if: success()
-        run: |
-          cd ios && bundle install && cd..
+          cd ios && pod install --repo-update --clean-install
